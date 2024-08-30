@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wyniki testu Shapiro-Wilka</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 0;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .normal {
+            background-color: #d4edda; /* zielony kolor tła dla normalnych */
+        }
+        .not-normal {
+            background-color: #f8d7da; /* czerwony kolor tła dla nienormalnych */
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Wyniki testu Shapiro-Wilka</h1>
+
+    {% if results %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Kolumna</th>
+                    <th>Statystyka testu</th>
+                    <th>p-value</th>
+                    <th>Wynik</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                    <tr class="{{ 'not-normal' if result.normality.startswith('Odrzucamy') else 'normal' }}">
+                        <td>{{ result.column }}</td>
+                        <td>{{ result.stat }}</td>
+                        <td>{{ result.p_value }}</td>
+                        <td>{{ result.normality }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Brak wyników do wyświetlenia.</p>
+    {% endif %}
+
+    <a href="{{ url_for('index') }}">Powrót do strony głównej</a>
+</body>
+</html>

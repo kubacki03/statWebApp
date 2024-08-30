@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grupowanie k-sr</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #343a40;
+            padding: 20px;
+            margin: 0;
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        h2 {
+            color: #007bff;
+            margin: 20px 0 10px;
+            padding: 0 20px;
+            border-bottom: 2px solid #007bff;
+        }
+
+        table.cluster-table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .container {
+            width: 90%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Podział na klastry</h1>
+
+        {% for cluster_label, indices in clusters.items() %}
+            <h2>Klaster: {{ cluster_label + 1 }}</h2> <!-- Display the cluster label -->
+            <table class="cluster-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Obiekty</th> <!-- Accessible header -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for index in indices %}
+                        <tr>
+                            <td>{{ index }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    </div>
+</body>
+</html>

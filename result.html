@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processed Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1, h2, h3 {
+            color: #444;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            margin-top: 10px;
+            margin-bottom: 30px;
+            font-size: 18px;
+            color: #555;
+        }
+
+        div {
+            width: 100%;
+            max-width: 80%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .form-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .form-container > div {
+            flex: 1 1 calc(33.333% - 20px); /* 3 kolumny, z uwzględnieniem odstępu */
+            min-width: 250px; /* Minimalna szerokość kontenera formularza */
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            display: block;
+            width: 100%; /* Pełna szerokość przycisku */
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        header {
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            div {
+                padding: 15px;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .form-container > div {
+                flex: 1 1 100%; /* 1 kolumna na małych ekranach */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Dane początkowe</h1>
+    <div>
+        {{ tables2|safe }}
+    </div>
+
+    <h2>Dane po oczyszczeniu</h2>
+    <h3>Po stymulacji, standaryzacji, usunięciu nieistotnych ze względów na V oraz odwrotnej macierzy korelacji</h3>
+    <div>
+        {{ tables|safe }}
+    </div>
+
+    <div class="form-container">
+        <div>
+            <form action="{{ url_for('ranking') }}" method="post" target="_blank">
+                <input type="hidden" name="cleaned_filename" value="{{ cleaned_filename }}">
+                <button type="submit">Grupowanie metoda odch. standardowych</button>
+                <header>Rangowanie metodą odchyleń standarodowych, bazując na zmiennej syntetycznej uzyskanej metoda Hellwiga</header>
+            </form>
+        </div>
+        <div>
+            <form action="{{ url_for('clustering') }}" method="post" target="_blank">
+                <input type="hidden" name="cleaned_filename" value="{{ cleaned_filename }}">
+                <button type="submit">Grupowanie metoda k-średnich</button>
+                <header>Klastry uzyskane metodą k-średnich, k przyjmujemy jako floor(n/4)</header>
+            </form>
+        </div>
+        <div>
+            <form action="{{ url_for('correlation') }}" method="post" target="_blank">
+                <input type="hidden" name="filename" value="{{ filename }}">
+                <button type="submit">Korelacja</button>
+                <header>Macierz korelacji Pearsona</header>
+            </form>
+        </div>
+        <div>
+            <form action="{{ url_for('shapiro_route') }}" method="post" target="_blank">
+                <input type="hidden" name="filename" value="{{ filename }}">
+                <button type="submit">Test normalnosci</button>
+                <header>Test Shapiro-Wilka</header>
+            </form>
+        </div>
+        <div>
+            <form action="{{ url_for('setY') }}" method="post" target="_blank">
+                <input type="hidden" name="filename" value="{{ filename }}">
+                <button type="submit">Predykcja wartości</button>
+                <header>Wykonaj predykcje korzystając z drzewa decyzyjnego</header>
+            </form>
+        </div>
+         <div>
+            <form action="{{ url_for('histograms') }}" method="post" target="_blank">
+                <input type="hidden" name="filename" value="{{ filename }}">
+                <button type="submit">Histogramy czestotliwosci</button>
+                <header>Analiza jak często występują dane wartosci</header>
+
+            </form>
+        </div>
+         <div>
+            <form action="{{ url_for('factor_analysis') }}" method="post" target="_blank">
+                <input type="hidden" name="filename" value="{{ filename }}">
+                <button type="submit">Analiza czynnikowa</button>
+                <header>Wylicza składniki własne oraz wykres osypiska</header>
+
+            </form>
+        </div>
+
+<div>
+            <form action="{{ url_for('stats') }}" method="post" target="_blank">
+                <input type="hidden" name="filename" value="{{ filename }}">
+                <button type="submit">Statystyki opisowe</button>
+                <header>Wyznacz podstawowe statystki opisowe</header>
+
+            </form>
+        </div>
+    </div>
+</body>
+</html>
